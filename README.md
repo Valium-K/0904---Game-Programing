@@ -1,2 +1,7 @@
-# 0904---Game-Programing
-Game Programing
+# 0904 - Game Programing
+
+<h1>게임 프로그래밍 계획서</h1>
+<hr/>
+<p>
+  /* 여기에 만들 게임과 추가할 기능 적을 계획 */
+</p>
