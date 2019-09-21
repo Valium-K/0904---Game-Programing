@@ -3,6 +3,7 @@
 
 ### __타겟 게임__: SNAKE
 > 간단한 Snake 게임을 만들고 기능을 추가 할 예정.
+> 따라한 소스코드: https://www.youtube.com/watch?v=21eSpMtJwrc
 
 ### __프로젝트 마감일__: 2019/10/23
 
