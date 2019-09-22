@@ -5,6 +5,7 @@
 
 html, body {
 	height: 50%;
+	width: 70%;
 	display: grid;
 }
 
@@ -20,6 +21,7 @@ body {
 
 #container {
 	margin: auto;
+	
 }
 
 #map {
@@ -27,7 +29,7 @@ body {
 	position: absolute;
 }
 
-#player_canvas {
+#game_canvas {
 	z-index: 2;
 	position: absolute;
 }
