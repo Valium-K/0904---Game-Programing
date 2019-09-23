@@ -4,18 +4,18 @@
 // MAP 상수
 const TILE_SIZE = 32; // Default: 32;
 const STROKE_SIZE = TILE_SIZE / 10; // 테두리 사이즈
-const TILE_NUM = 15; // 타일 수
+const TILE_NUM = 7; // 타일 수
 const MAP_SIZE = TILE_SIZE * TILE_NUM; // 맵 사이즈
 const MAP_COLOR = "#303840";
 const MAP_STROKE_COLOR = "#202830";
 
 // 지렁이 상수
-var SNAKE_SPEED = 250 * 0.5; // 지렁이 스피드
+const SNAKE_SPEED = 250 * 0.5; // 지렁이 스피드
 const SNAKE_HEAD_COLOR = "#ff5900"; // 지렁이 머리 색상
 const SNAKE_TAIL_COLOR = "#ff9900"; // 지렁이 꼬리 색상
 
 // 아이템 상수
-const ITEM_SPAWN_RANDOM_NUM = 10; // 아이템이 이 랜덤수와 같아야 스폰됨
+const ITEM_SPAWN_RANDOM_NUM = 75; // 아이템이 이 랜덤수와 같아야 스폰됨
 const LENGTH_FOR_ITEM_SPAWN = 10; // SNAKE가 해당 길이 이상일때 아이템 스폰됨
 const ITEM_VALUE = 3; // 아이템이 지울 꼬리 길이
 const ITEM_COLOR = "#8c00ff";
@@ -129,8 +129,8 @@ function Queue() {
 
 function Snake() {
 	// 플레이어 위치 - 타일 오프셋에 기반함
-	this.x = 0;
-	this.y = 0;
+	this.x = TILE_SIZE * Math.floor(TILE_NUM / 2);
+	this.y = TILE_SIZE * Math.floor(TILE_NUM / 2);
 	
 	// 타일 오프셋
 	this.xOffset = 0;
@@ -225,9 +225,22 @@ function Fruit() {
 	this.init = function() {
 		this.pickLocation();
 	}
+	
 	this.pickLocation = function() {
 		this.x = (Math.floor(Math.random() * TILE_NUM - 1) + 1) * TILE_SIZE * 1;
 		this.y = (Math.floor(Math.random() * TILE_NUM - 1) + 1) * TILE_SIZE * 1;
+
+		if(this.x == gameManager.getItemXPos() && this.y == gameManager.getItemYPos()) {
+			this.pickLocation();
+			return;
+		}
+		for(let i = snake.getTailOffset(); i < snake.getTail().length - 1; i++) {
+			if(this.x == snake.getTail()[i].x && this.y == snake.getTail()[i].y) {
+				console.log("called by fruit side - same location");
+				this.pickLocation();
+				return;
+			}
+		}
 	}
 	
 	this.fruitManager = function() {
@@ -249,6 +262,9 @@ function GameManagerClass() {
 	this.isGameOver = false;
 	this.score = 0;
 	this.itemCount = 0; // 아이템을 먹은 수 - 실제 꼬리 길이를 구하기 위함
+	
+	this.getItemXPos = function() { return this.itemXPos; }
+	this.getItemYPos = function() { return this.itemYPos; }
 	
 	this.init = function() {
 		this.itemSpawnNum = Math.floor(Math.random() * ITEM_SPAWN_RANDOM_NUM) + 1;
@@ -305,6 +321,19 @@ function GameManagerClass() {
 	this.setRandomPos = function() {
 		this.itemXPos = (Math.floor(Math.random() * TILE_NUM - 1) + 1) * TILE_SIZE * 1;
 		this.itemYPos = (Math.floor(Math.random() * TILE_NUM - 1) + 1) * TILE_SIZE * 1;	
+
+		if(this.itemXPos == fruit.getXPos() && this.itemYPos == fruit.getYPos()) {
+			this.setRandomPos();
+			return;
+		}
+		
+		for(let i = snake.getTailOffset(); i < snake.getTail().length - 1; i++) {
+			if(this.itemXPos == snake.getTail()[i].x && this.itemYPos == snake.getTail()[i].y) {
+				console.log("called by item side - same location");
+				this.setRandomPos();
+				return;
+			}
+		}
 	}
 	
 	this.generateItem = function() {
@@ -315,7 +344,11 @@ function GameManagerClass() {
 }
 
 (function init(){
+	// gameManager 객체 생성
+	gameManager = new GameManagerClass();
+	gameManager.init();
 	
+	// 맵 객체 생성
 	map = new Map();
 	map.init();
 	
@@ -325,17 +358,14 @@ function GameManagerClass() {
 	// 플레이어 객체 생성
 	snake = new Snake();
 	
+	// fruit 객체 생성
 	fruit = new Fruit();
 	fruit.init();
-	
-	gameManager = new GameManagerClass();
-	gameManager.init();
 	
 	map.draw();
 	
 	// 업데이트 함수
 	window.setInterval(() => {
-		if(snake.totalEatenFruit >= 3) { SNAKE_SPEED = 50; }
 		snake.changeDirection();
 		map.clearObject();
 		snake.setPos();
