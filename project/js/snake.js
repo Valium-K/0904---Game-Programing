@@ -4,7 +4,7 @@
 // MAP 상수
 const TILE_SIZE = 32; // Default: 32;
 const STROKE_SIZE = TILE_SIZE / 10; // 테두리 사이즈
-const TILE_NUM = 7; // 타일 수
+const TILE_NUM = 15; // 타일 수
 const MAP_SIZE = TILE_SIZE * TILE_NUM; // 맵 사이즈
 const MAP_COLOR = "#303840";
 const MAP_STROKE_COLOR = "#202830";
@@ -23,6 +23,8 @@ const ITEM_COLOR = "#8c00ff";
 // FRUIT 상수
 const FRUIT_COLOR = "#99ff00";
 
+// UI 상수
+
 /////////////////////////////////////////////////////////////////////////////////
 
 function Map() {
@@ -37,18 +39,19 @@ function Map() {
 	this.init = function() {
 		this.map = document.getElementById("map");
 		this.mapContxt = this.map.getContext("2d");
-		this.map.width = MAP_SIZE;
-		this.map.height = MAP_SIZE;
+		this.map.width = MAP_SIZE * 10;
+		this.map.height = MAP_SIZE * 10;
 		
 		this.gameCanvas = document.getElementById("game_canvas");
 		this.gamemapContext = this.gameCanvas.getContext("2d");
-		this.gameCanvas.width = MAP_SIZE;
-		this.gameCanvas.height = MAP_SIZE;
+		this.gameCanvas.width = MAP_SIZE * 10;
+		this.gameCanvas.height = MAP_SIZE * 10;
 		this.gamemapContext.fillStyle = SNAKE_TAIL_COLOR;
 		
 		this.drawMap();
 	}
 	this.draw = function() {
+		this.drawMap(); //타일이 30개 이상 일경우 급격히 느려짐
 		this.drawFruit();
 		this.drawSnake();
 		this.drawItem();
@@ -59,9 +62,9 @@ function Map() {
 		this.mapContxt.strokeStyle = MAP_STROKE_COLOR;
 		
 		for(var height = 0; height < MAP_SIZE / TILE_SIZE; height++) {
-			for(var width = 0; width < MAP_SIZE / TILE_SIZE; width++) {
-				this.mapContxt.fillRect(width*TILE_SIZE, height*TILE_SIZE, TILE_SIZE, TILE_SIZE);		
-				this.mapContxt.strokeRect(width*TILE_SIZE, height*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+			for(var width = 0; width <MAP_SIZE / TILE_SIZE; width++) {
+				this.mapContxt.fillRect(((window.innerWidth - MAP_SIZE) / 2) + width * TILE_SIZE, ((window.innerHeight - MAP_SIZE) / 2) +  + height*TILE_SIZE, TILE_SIZE, TILE_SIZE);		
+				this.mapContxt.strokeRect(((window.innerWidth - MAP_SIZE) / 2) + width * TILE_SIZE, ((window.innerHeight - MAP_SIZE) / 2) +  + height*TILE_SIZE, TILE_SIZE, TILE_SIZE);
 			}
 		}
 	}
@@ -70,27 +73,28 @@ function Map() {
 		// 꼬리 그리기
 		this.gamemapContext.fillStyle = SNAKE_TAIL_COLOR;
 		for(let i = snake.tailOffset; i < snake.tail.length; i++) {
-			this.gamemapContext.fillRect((snake.tail[i].x) + STROKE_SIZE, (snake.tail[i].y) + STROKE_SIZE, 
+			this.gamemapContext.fillRect(((window.innerWidth - MAP_SIZE) / 2) + (snake.tail[i].x) + STROKE_SIZE, ((window.innerHeight - MAP_SIZE) / 2) + (snake.tail[i].y) + STROKE_SIZE, 
 										TILE_SIZE - STROKE_SIZE*2, TILE_SIZE - STROKE_SIZE*2);
 		}
 		
 		// 머리그리기
 		this.gamemapContext.fillStyle = SNAKE_HEAD_COLOR;
-		this.gamemapContext.fillRect(snake.getXPos() + STROKE_SIZE, snake.getYPos() + STROKE_SIZE, TILE_SIZE - STROKE_SIZE*2, TILE_SIZE - STROKE_SIZE*2);
+		this.gamemapContext.fillRect(((window.innerWidth - MAP_SIZE) / 2) + snake.getXPos() + STROKE_SIZE, ((window.innerHeight - MAP_SIZE) / 2) + snake.getYPos() + STROKE_SIZE, TILE_SIZE - STROKE_SIZE*2, TILE_SIZE - STROKE_SIZE*2);
 	}
 	this.drawFruit = function() {
 		this.gamemapContext.fillStyle = FRUIT_COLOR;
-		this.gamemapContext.fillRect(fruit.getXPos() + STROKE_SIZE, fruit.getYPos() + STROKE_SIZE, TILE_SIZE - STROKE_SIZE*2, TILE_SIZE - STROKE_SIZE*2);
+		this.gamemapContext.fillRect(((window.innerWidth - MAP_SIZE) / 2) + fruit.getXPos() + STROKE_SIZE, ((window.innerHeight - MAP_SIZE) / 2) + fruit.getYPos() + STROKE_SIZE, TILE_SIZE - STROKE_SIZE*2, TILE_SIZE - STROKE_SIZE*2);
 	}
 	this.drawItem = function() {
 		//console.log(isItemOnTheMap);
-		if(gameManager.isItemOnTheMap) {
+		if(gm.isItemOnTheMap) {
 			this.gamemapContext.fillStyle = ITEM_COLOR;
-			this.gamemapContext.fillRect(gameManager.itemXPos + STROKE_SIZE, gameManager.itemYPos + STROKE_SIZE, TILE_SIZE - STROKE_SIZE*2, TILE_SIZE - STROKE_SIZE*2);
+			this.gamemapContext.fillRect(((window.innerWidth - MAP_SIZE) / 2) + gm.itemXPos + STROKE_SIZE, ((window.innerHeight - MAP_SIZE) / 2) + gm.itemYPos + STROKE_SIZE, TILE_SIZE - STROKE_SIZE*2, TILE_SIZE - STROKE_SIZE*2);
 		}		
 	}
 	this.clearObject = function() {
 		this.gamemapContext.clearRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
+		this.mapContxt.clearRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
 	}
 }
 
@@ -129,19 +133,19 @@ function Queue() {
 
 function Snake() {
 	// 플레이어 위치 - 타일 오프셋에 기반함
-	this.x = TILE_SIZE * Math.floor(TILE_NUM / 2);
-	this.y = TILE_SIZE * Math.floor(TILE_NUM / 2);
+	this.x;
+	this.y;
 	
 	// 타일 오프셋
-	this.xOffset = 0;
-	this.yOffset = 0;
+	this.xOffset;
+	this.yOffset;
 	
 	// 플레이어 속성
-	this.direction = '';
-	this.totalEatenFruit = 0;
+	this.direction;
+	this.totalEatenFruit;
 
 	this.tail = [];
-	this.tailOffset = 0; // 아이템으로 지운 꼬리길이 오프셋
+	this.tailOffset; // 아이템으로 지운 꼬리길이 오프셋
 	
 	// getter
 	this.getXPos = function() { return this.x; }
@@ -159,8 +163,21 @@ function Snake() {
 	this.setTotalEatenFruit = function(fruitNum) { this.totalEatenFruit = fruitNum; }	
 	this.setTailOffset = function(to) { this.tailOffset = to; }
 	
-	this.setPos = function() {
+	this.init = function() {
+		this.x = TILE_SIZE * Math.floor(TILE_NUM / 2);
+		this.y = TILE_SIZE * Math.floor(TILE_NUM / 2);
 		
+		this.xOffset = 0;
+		this.yOffset = 0;
+	
+		this.direction = '';
+		this.totalEatenFruit = 0;
+
+		this.tail = [];
+		this.tailOffset = 0;
+	}
+	this.setPos = function() {
+		if(gm.isGameOver){ return; }
 		// 꼬리 위치 한칸씩 이동 - 꼬리와 머리사이는 null 즉, tail[0]이 꼬리 끝, tail[length-1]이 머리바로 뒤 꼬리
 		for(let i = this.tailOffset; i < this.tail.length - 1; i++) {
 			this.tail[i] = this.tail[i + 1];
@@ -230,7 +247,7 @@ function Fruit() {
 		this.x = (Math.floor(Math.random() * TILE_NUM - 1) + 1) * TILE_SIZE * 1;
 		this.y = (Math.floor(Math.random() * TILE_NUM - 1) + 1) * TILE_SIZE * 1;
 
-		if(this.x == gameManager.getItemXPos() && this.y == gameManager.getItemYPos()) {
+		if(this.x == gm.getItemXPos() && this.y == gm.getItemYPos()) {
 			this.pickLocation();
 			return;
 		}
@@ -253,25 +270,38 @@ function Fruit() {
 	}
 }
 
-function GameManagerClass() {
+function GameManager() {
 	this.itemSpawnNum = 0;
-	this.itemXPos = null;
-	this.itemYPos = null;
-	this.isItemOnTheMap = false;
-	
-	this.isGameOver = false;
-	this.score = 0;
-	this.itemCount = 0; // 아이템을 먹은 수 - 실제 꼬리 길이를 구하기 위함
+	this.itemXPos;
+	this.itemYPos;
+	this.isItemOnTheMap;
+	this.isItNewScore;
+	this.isGameOver;
+	this.highScore;
+	this.itemCount; // 아이템을 먹은 수 - 실제 꼬리 길이를 구하기 위함
 	
 	this.getItemXPos = function() { return this.itemXPos; }
 	this.getItemYPos = function() { return this.itemYPos; }
 	
 	this.init = function() {
 		this.itemSpawnNum = Math.floor(Math.random() * ITEM_SPAWN_RANDOM_NUM) + 1;
+		this.itemXPos = null;
+		this.itemYPos = null;
+		this.isItemOnTheMap = false;
+	
+		this.isGameOver = false;
+		this.highScore = 0;
+		this.itemCount = 0;
+		
 	}
-	this.gameManagement = function() {
+	this.gameManager = function() {
 		if(this.isGameOver) {
-			confirm("Game Over! \nTotal Eaten Fruit: " + snake.totalEatenFruit);
+			if(localStorage.getItem("highScore") < snake.totalEatenFruit) {
+				this.highScore = snake.totalEatenFruit;
+				this.isItNewScore = true;
+				localStorage.setItem("highScore", snake.totalEatenFruit);
+			}
+			ui.resultMenu();
 		}
 		
 		// 몸에 닿으면
@@ -283,6 +313,8 @@ function GameManagerClass() {
 		}
 		// 벽에 닿으면
 		if(snake.getXPos() < 0 || snake.getXPos() >= MAP_SIZE || snake.getYPos() < 0 || snake.getYPos() >= MAP_SIZE) {
+			snake.setXPos(-1000);
+			snake.setYPos(-1000);
 			this.isGameOver = true;
 			console.log("wall Hit");
 		}
@@ -314,6 +346,14 @@ function GameManagerClass() {
 			this.itemCount++;
 		}		
 	}
+	this.restartGame = function() {
+		snake.init();
+		
+		fruit.pickLocation();
+		
+		gm.init();
+		
+	}
 	this.setItemSpawnNum = function() {
 		this.itemSpawnNum = Math.floor(Math.random() * ITEM_SPAWN_RANDOM_NUM) + 1;
 	}
@@ -342,11 +382,74 @@ function GameManagerClass() {
 	}
 
 }
+function Ui() {
+	this.isItTitle;
+	this.isItResult;
+	
+	this.init = function() {
+		this.isItTitle = true;
+		
+		this.ui = document.getElementById("ui");
+		this.uiContext = this.ui.getContext("2d");
+		this.uiContext.textBaseline  = "top";
+		
+		this.ui.width = window.innerWidth;
+		this.ui.height = window.innerHeight;	
+	}
 
+	
+	this.titleMenu = function() {
+		if(this.isItTitle) {
+			this.uiContext.fillStyle = "#e0e0e0";
+			this.uiContext.font = '500% Arial';
+			
+			this.uiContext.fillText("S N A K E", window.innerWidth / 2 - 180, window.innerHeight / 2 * 0.25);
+
+			this.uiContext.font = '150% Arial';
+			this.uiContext.fillText("Press any key to start", window.innerWidth / 2 - 115, window.innerHeight / 2 * 1.9);	
+		}
+	}
+	this.resultMenu = function() {
+			this.uiContext.fillStyle = "#e0e0e0";
+			this.uiContext.font = '320% Arial';
+			this.uiContext.fillText("H I G H S C O R E : " + localStorage.getItem("highScore"), window.innerWidth / 2 - 250, window.innerHeight / 2 * 0.2);
+			
+			if(gm.isItNewScore) {
+				this.uiContext.font = '400% Arial';
+				this.uiContext.fillText("!! N E W  S C O R E !!", window.innerWidth / 2 - 310, window.innerHeight / 2 * 0.65);
+			}
+			else {
+				this.uiContext.font = '400% Arial';
+				this.uiContext.fillText("R E S U L T", window.innerWidth / 2 - 170, window.innerHeight / 2 * 0.65);
+			}
+
+			
+			this.uiContext.fillStyle = "#870029";
+			this.uiContext.font = '1000% Arial';
+			this.uiContext.fillText(snake.totalEatenFruit, window.innerWidth / 2 - 40, window.innerHeight / 2 * 1.1);	
+			
+			this.uiContext.fillStyle = "#e0e0e0";
+			this.uiContext.font = '150% Arial';
+			this.uiContext.fillText("Press any key to restart", window.innerWidth / 2 - 115, window.innerHeight / 2 * 1.9);	
+		
+	}
+	this.uiManager = function() {
+			this.uiContext.clearRect(0, 0, this.ui.width, this.ui.height);
+			this.uiContext.fillText("", 0, 0);
+	}
+}
 (function init(){
+	// high score init
+	if(localStorage.getItem("highScore") == null) {
+		localStorage.setItem("highScore", 0);	
+	}	
+	
 	// gameManager 객체 생성
-	gameManager = new GameManagerClass();
-	gameManager.init();
+	gm = new GameManager();
+	gm.init();
+	
+	ui = new Ui();
+	ui.init();	
 	
 	// 맵 객체 생성
 	map = new Map();
@@ -357,21 +460,22 @@ function GameManagerClass() {
 	
 	// 플레이어 객체 생성
 	snake = new Snake();
+	snake.init();
 	
 	// fruit 객체 생성
 	fruit = new Fruit();
 	fruit.init();
-	
-	map.draw();
-	
+
 	// 업데이트 함수
 	window.setInterval(() => {
+		ui.uiManager();ui.titleMenu();
 		snake.changeDirection();
 		map.clearObject();
 		snake.setPos();
 		fruit.fruitManager();
-		gameManager.gameManagement();
+		gm.gameManager();
 		map.draw();
+		console.log(gm.isItNewScore);
 	}, SNAKE_SPEED);
 }());
 
@@ -379,5 +483,30 @@ function GameManagerClass() {
 // 키입력 이벤트 발생
 window.addEventListener("keydown", ((e) => {
 	var direction = e.key.replace('Arrow', '');
+	
+	// 타이틀 화면이라면 게임시작
+	if(ui.isItTitle == true) {
+		ui.isItTitle = false;
+	}
+	
+	// 게임오버시 방향키는 무시 - 이 코드를 빼면 사용자가 가끔 자기 스코어 못 봄
+	if(gm.isGameOver == true && (direction == "Down" || 
+										direction == "Up" ||
+										direction == "Left" || 
+										direction == "Right")) {
+		return;
+	}
+	
+	// 게임오버시 방향키 제외한 키입력시 재시작
+	if(gm.isGameOver == true && (direction != "Down" || 
+										direction != "Up" ||
+										direction != "Left" || 
+										direction != "Right")){
+		gm.isGameOver = false;
+		gm.isItNewScore = false;
+		gm.restartGame();
+	}
+	
 	queue.push(direction);
+
 }))

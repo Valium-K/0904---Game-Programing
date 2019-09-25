@@ -3,37 +3,29 @@
 	padding: 0px;
 }
 
-html, body {
-	height: 50%;
-	width: 70%;
-	display: grid;
-}
-
-body {
-	background: linear-gradient(-45deg, #282931, #190e0e, #282931, #050404);
-	background-size: 400% 400%;
-	-webkit-animation: Gradient 15s ease infinite;
-	-moz-animation: Gradient 15s ease infinite;
-	animation: Gradient 15s ease infinite;
-  -webkit-font-smoothing: antialiased;
- font-family: 'Amatic SC', cursive;
+html {
+	background: #202830;
 }
 
 #container {
-	margin: auto;
-	
+
 }
 
 #map {
+	position: fixed;
 	z-index: 1;
-	position: absolute;
+	
 }
 
 #game_canvas {
+	position: fixed;
 	z-index: 2;
-	position: absolute;
+	
 }
-
+#ui {
+	position: fixed;
+	z-index: 3;
+}
 
 
 
