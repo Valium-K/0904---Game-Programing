@@ -33,7 +33,7 @@ function drawScreen() {
 	context.font = '50px Arial';
 	context.textBaseline  = "top";
 	
-	if(gameState == GAME_STATE_READY) {  context.fillText("준비", 330, 180);  }
+	if(gameState == GAME_STATE_READY) {  context.fillText("준비", 330, 180);  intPlayerX = 350; intPlayerY = 250;}
 	else if(gameState == GAME_STATE_GAME) {  }
 	else if(gameState == GAME_STATE_OVER) {  context.fillText("게임 오버!", 330, 180);  }
 }
@@ -48,25 +48,33 @@ function onkeydown(e) {
 		case 37: 
 			intPlayerX -= 5;
 			
-			if(intPlayerX < 0) {  intPlayerX = 0;  }
+			if(intPlayerX < 0) {  //intPlayerX = 0; 
+			  gameState = GAME_STATE_OVER
+			}
 			break;
 			
 		case 39: 
 			intPlayerX += 5;
 			
-			if(intPlayerX > 740) {  intPlayerX = 740;  }
+			if(intPlayerX > 740) {  
+			//intPlayerX = 740; 
+			gameState = GAME_STATE_OVER
+			}
 			break;
 			
 		case 38: 
 			intPlayerY -= 5;
 			
-			if(intPlayerY < 0) {  intPlayerY = 0;  }
+			if(intPlayerY < 0) { // intPlayerY = 0;  
+			gameState = GAME_STATE_OVER}
 			break;
 			
 		case 40: 
 			intPlayerY += 5;
 			
-			if(intPlayerY > 540) {  intPlayerY = 540;  }
+			if(intPlayerY > 540) {  //intPlayerY = 540; 
+gameState = GAME_STATE_OVER
+			}
 			break;
 		}
 	}
