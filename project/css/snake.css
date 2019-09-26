@@ -3,7 +3,7 @@
 	padding: 0px;
 }
 
-html {
+#body {
 	background: #202830;
 }
 
@@ -25,50 +25,4 @@ html {
 #ui {
 	position: fixed;
 	z-index: 3;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@-webkit-keyframes Gradient {
-	0% {background-position: 0% 50%}
-	50% {background-position: 100% 50%}
-	100% {background-position: 0% 50%}
-}
-
-@-moz-keyframes Gradient {
-	0% {background-position: 0% 50%}
-	50% {background-position: 100% 50%}
-	100% {background-position: 0% 50%}
-}
-
-@keyframes Gradient {
-	0% {background-position: 0% 50%}
-	50% {background-position: 100% 50%}
-	100% {background-position: 0% 50%}
 }
