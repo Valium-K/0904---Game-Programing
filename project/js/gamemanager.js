@@ -9,6 +9,11 @@ function GameManager() {
 	this.itemCount; // 아이템을 먹은 수 - 실제 꼬리 길이를 구하기 위함
 	this.isHardModeOn = false;
 	
+	this.timeCounterAddress;
+	this.nowTime = 0;
+	this.timeLeft;
+	
+	
 	this.getItemXPos = function() { return this.itemXPos; }
 	this.getItemYPos = function() { return this.itemYPos; }
 	
@@ -21,6 +26,7 @@ function GameManager() {
 		this.isGameOver = false;
 		this.highScore = 0;
 		this.itemCount = 0;
+		this.timeLeft = SNAKE_HUNGER_TIME;
 	}
 	
 	this.gameManager = function() {
@@ -50,6 +56,7 @@ function GameManager() {
 		// 몸에 닿으면
 		for(let i = 0; i < (snake.getTail().length) - 1; i++) {
 			if(snake.getXPos() == snake.getTail()[i].x && snake.getYPos() == snake.getTail()[i].y) {
+				console.log("body hit");
 				this.isGameOver = true;
 			}
 		}
@@ -57,7 +64,9 @@ function GameManager() {
 		// 벽에 닿으면
 		if(snake.getXPos() < 0 || snake.getXPos() >= MAP_SIZE || 
 		   snake.getYPos() < 0 || snake.getYPos() >= MAP_SIZE) {
-			   
+			
+			console.log("wall hit");
+			
 			snake.setXPos(-1000);
 			snake.setYPos(-1000);
 			this.isGameOver = true;
@@ -97,16 +106,23 @@ function GameManager() {
 		if(gm.isHardModeOn) {
 			for(let i = 0; i < snake.poopCount; i++) {
 				if(snake.getXPos() == snake.poop[i].x && snake.getYPos() == snake.poop[i].y) {
+					console.log("poop hit");
 					this.isGameOver = true;
 				}
 			}
+		}
+		
+		if(this.timeLeft <= 0) {
+			this.isGameOver = true;
+			this.timeLeft = 0;
 		}
 	}
 	
 	this.restartGame = function() {
 		snake.init();
 		fruit.pickLocation();
-		gm.init();	
+		gm.init();
+		gm.timeCounter();
 	}
 	
 	this.generateItem = function() {
@@ -179,8 +195,35 @@ function GameManager() {
 		}
 	}
 	
+
+	
 	this.startGame = function() {
 		audio.inGameBgm();
-		ui.isItTitle = false; 
+		ui.isItTitle = false;
+		
+		if(this.isHardModeOn) { return; }
+		this.timeCounter();
+	}
+	
+	this.timeCounter = function() {
+		// 일정시간 지나면 게임오버
+
+		this.nowTime = new Date().getTime();
+		this.timeCounterAddress = setInterval(() => {
+			
+			var now = new Date().getTime();
+			this.timeLeft = (now - this.nowTime);
+			this.timeLeft = SNAKE_HUNGER_TIME - this.timeLeft;
+			
+			
+		}, 100);
+	}
+	
+	this.resetCounter = function() {
+		if(this.isHardModeOn) { return; }
+		
+		clearInterval(this.timeCounterAddress);
+		
+		this.timeCounter();
 	}
 }

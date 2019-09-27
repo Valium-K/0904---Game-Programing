@@ -15,7 +15,7 @@ const MAP_STROKE_COLOR_HARD = "#302020";
 const SNAKE_SPEED = 250 * 0.5; // 지렁이 스피드
 const SNAKE_HEAD_COLOR = "#00ff44"; // 지렁이 머리 색상
 const SNAKE_TAIL_COLOR = "#009919"; // 지렁이 꼬리 색상
-
+const SNAKE_HUNGER_TIME = SNAKE_SPEED * 2.7 * TILE_NUM;
 // 아이템 상수
 const ITEM_SPAWN_RANDOM_NUM = 70; // 아이템이 이 랜덤수와 같아야 스폰됨
 const LENGTH_FOR_ITEM_SPAWN = 10; // SNAKE가 해당 길이 이상일때 아이템 스폰됨

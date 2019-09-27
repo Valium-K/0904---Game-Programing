@@ -1,4 +1,32 @@
+var interval;
+var speed = SNAKE_SPEED;
+
+var update = function(speed, eatenFruitNum) {
+	
+	interval = window.setInterval(() => {
+		
+			console.log(speed + " " + snake.totalEatenFruit);
+			ui.uiManager();
+			ui.titleMenu();
+			snake.changeDirection();
+			map.clearObject();
+			snake.setPos();
+			fruit.fruitManager();
+			gm.gameManager();
+			map.draw();
+			ui.uiTime();
+			if(snake.totalEatenFruit != eatenFruitNum && (snake.totalEatenFruit % 5) == 0) {
+				speed = Math.floor(speed * 0.95);
+				eatenFruitNum = snake.totalEatenFruit;
+				clearInterval(interval);
+				
+				update(speed, eatenFruitNum);
+			}
+	}, speed);
+	
+};
 (function main(){
+	
 	// high score init
 	if(localStorage.getItem("highScore") == null) {
 		localStorage.setItem("highScore", 0);	
@@ -33,15 +61,6 @@
 	fruit.init();
 	
 	// 업데이트 함수
-	window.setInterval(() => {
-			ui.uiManager();
-			ui.titleMenu();
-			snake.changeDirection();
-			map.clearObject();
-			snake.setPos();
-			fruit.fruitManager();
-			gm.gameManager();
-			map.draw();
-	}, SNAKE_SPEED);
+	update(speed, 0);
 	
 }());

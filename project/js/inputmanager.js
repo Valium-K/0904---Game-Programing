@@ -25,6 +25,10 @@ window.addEventListener("keydown", ((e) => {
 								 direction != "Up"   ||
 								 direction != "Left" || 
 								 direction != "Right")){
+								
+								
+		clearInterval(gm.hungerTimer);
+		clearInterval(gm.nowHungerTime);
 		gm.isGameOver = false;
 		gm.isItNewScore = false;
 		gm.restartGame();

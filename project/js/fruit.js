@@ -35,6 +35,7 @@ function Fruit() {
 			this.pickLocation();
 			snake.totalEatenFruit++;
 			snake.poopNow();
+			gm.resetCounter();
 		}
 	}
 }

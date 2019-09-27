@@ -54,6 +54,7 @@ function Ui() {
 	}
 	
 	this.resultMenu = function() {
+			clearInterval(gm.timeCounterAddress);
 			this.uiContext.fillStyle = "#e0e0e0";
 			this.uiContext.font = '320% Arial';
 			if(gm.isHardModeOn) {
@@ -83,14 +84,14 @@ function Ui() {
 			this.uiContext.fillStyle = "#870029";
 			this.uiContext.font = '1000% Arial';
 			
-			if(snake.totalEatenFruit <= 10) { 
+			if(snake.totalEatenFruit < 10) { 
 				this.uiContext.fillText("0" + snake.totalEatenFruit, 
 										 window.innerWidth / 2 - 90, 
 										 window.innerHeight / 2 * 1.1);
 			}
 			else { 
 				this.uiContext.fillText(snake.totalEatenFruit, 
-										window.innerWidth / 2 - 40, 
+										window.innerWidth / 2 - 90, 
 										window.innerHeight / 2 * 1.1);
 			}
 			
@@ -105,5 +106,14 @@ function Ui() {
 	this.uiManager = function() {
 			this.uiContext.clearRect(0, 0, this.ui.width, this.ui.height);
 			this.uiContext.fillText("", 0, 0);
+	}
+	
+	this.uiTime = function() {
+		this.uiContext.font = '120% Arial';
+			this.uiContext.fillText(Math.floor(gm.timeLeft / 100),
+								    ((window.innerWidth - MAP_SIZE) / 2) + fruit.getXPos() + STROKE_SIZE + 2.3,
+									((window.innerHeight - MAP_SIZE) / 2) + fruit.getYPos() + STROKE_SIZE + 19);
+			
+		
 	}
 }
