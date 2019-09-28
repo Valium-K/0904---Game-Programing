@@ -4,6 +4,7 @@ window.addEventListener("keydown", ((e) => {
 
 	// 타이틀 화면이라면 게임모드 설정 후 게임시작
 	if(ui.isItTitle == true && direction == "h") {
+	   ui.isItTitle == true && direction == "H") {
 		gm.modeChanger();
 	}
 	
