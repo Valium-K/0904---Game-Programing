@@ -23,9 +23,11 @@ function Map() {
 		this.gameCanvas.width = MAP_SIZE * 10;
 		this.gameCanvas.height = MAP_SIZE * 10;
 		this.gamemapContext.fillStyle = SNAKE_TAIL_COLOR;
+		
+		this.drawMap();
 	}
 	this.draw = function() {
-		this.drawMap();
+		//this.drawMap();
 		this.drawFruit();
 		this.drawSnake();
 		this.drawPoop();
@@ -81,6 +83,6 @@ function Map() {
 	
 	this.clearObject = function() {
 		this.gamemapContext.clearRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
-		this.mapContxt.clearRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
+		//this.mapContxt.clearRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
 	}
 }

@@ -4,16 +4,16 @@ var speed = SNAKE_SPEED;
 var update = function(speed, eatenFruitNum) {
 	
 	interval = window.setInterval(() => {
-		
-			console.log(speed + " " + snake.totalEatenFruit);
-			ui.uiManager();
-			ui.titleMenu();
-			snake.changeDirection();
+			//console.log(speed + " " + snake.totalEatenFruit);
+			ui.clearUi();
+			ui.sceneUi();
 			map.clearObject();
+			snake.changeDirection();
 			snake.setPos();
 			fruit.fruitManager();
 			gm.gameManager();
 			map.draw();
+			//ui.inGameUi();
 			ui.uiTime();
 			if(snake.totalEatenFruit != eatenFruitNum && (snake.totalEatenFruit % 5) == 0) {
 				speed = Math.floor(speed * 0.95);
@@ -26,7 +26,7 @@ var update = function(speed, eatenFruitNum) {
 	
 };
 (function main(){
-	
+
 	// high score init
 	if(localStorage.getItem("highScore") == null) {
 		localStorage.setItem("highScore", 0);	
@@ -37,6 +37,8 @@ var update = function(speed, eatenFruitNum) {
 	
 	audio = new AudioManager();
 	audio.init();
+	audio.loop = false;
+	audio.playTitleBgm();
 	
 	// gameManager 객체 생성
 	gm = new GameManager();
@@ -59,6 +61,11 @@ var update = function(speed, eatenFruitNum) {
 	// fruit 객체 생성
 	fruit = new Fruit();
 	fruit.init();
+	
+	audio.playTitleBgm();
+	map.drawMap();
+	
+
 	
 	// 업데이트 함수
 	update(speed, 0);

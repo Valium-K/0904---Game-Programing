@@ -6,23 +6,29 @@
     <meta name = "viewport" content = "width=device-width">
 	<link rel="stylesheet" type="text/css" href="./css/snake.css"/>
   </head>
-  <body id="body">
+  <body id="body" onresize="reDraw()">
+
     <div id="container">
 		<canvas id="ui"></canvas>
 		<canvas id="map"></canvas>
 		<canvas id="game_canvas"></canvas>
-	</div>	
+	</div>
 	<script src="./js/const.js"></script>
+	<script src="./js/audio.js"></script>
 	<script src="./js/map.js"></script>
+	<script>
+		function reDraw() {
+			map.mapContxt.clearRect(0, 0, map.gameCanvas.width, map.gameCanvas.height);
+			map.drawMap();
+		}
+	</script>
 	<script src="./js/queue.js"></script>
 	<script src="./js/snake.js"></script>
 	<script src="./js/fruit.js"></script>
 	<script src="./js/gamemanager.js"></script>
 	<script src="./js/ui.js"></script>
 	<script src="./js/inputmanager.js"></script>
-	<script src="./js/audio.js"></script>
 	<script src="./js/main.js"></script>
-
 	
   </body>
 </html>

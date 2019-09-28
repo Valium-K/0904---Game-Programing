@@ -77,6 +77,7 @@ function Snake() {
 				this.xOffset = 0;
 				this.yOffset = TILE_SIZE * -1;
 				this.direction = 'Up';
+				audio.playSFX(DIR_UP);
 				break;
 				
 			case 'Down':
@@ -84,6 +85,7 @@ function Snake() {
 				this.xOffset = 0;
 				this.yOffset = TILE_SIZE * 1;
 				this.direction = 'Down';
+				audio.playSFX(DIR_DOWN);
 				break;
 				
 			case 'Left':
@@ -91,6 +93,7 @@ function Snake() {
 				this.xOffset = TILE_SIZE * -1;
 				this.yOffset = 0;
 				this.direction = 'Left';
+				audio.playSFX(DIR_LEFT);
 				break;
 				
 			case 'Right':
@@ -98,6 +101,7 @@ function Snake() {
 				this.xOffset = TILE_SIZE * 1;
 				this.yOffset = 0;
 				this.direction = 'Right';
+				audio.playSFX(DIR_RIGHT);
 				break;
 		}
 	}
