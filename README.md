@@ -30,4 +30,13 @@
     * 일정 시간동안 먹이를 먹지 않을시 게임오버
   * 하드모드 추가
     * 일정량의 먹이를 먹으면 똥을 누며 그 자리에 접촉하면 게임오버
+  * BGM, SFX 추가
+    * HARD MODE BGM: https://ko.audioblocks.com/stock-audio/r3-93022.html
+    * NORMAL MODE BGM: https://ko.audioblocks.com/stock-audio/gibiduk-93002.html
+    * TITLE BGM: https://ko.audioblocks.com/stock-audio/upstream-93031.html
+    * RESULT BGM: https://ko.audioblocks.com/stock-audio/isberg-93006.html
+    
+    * SFX VSTI: Bleep'
+  * 인게임 현재 스코어 표시
+  
 -----------------
