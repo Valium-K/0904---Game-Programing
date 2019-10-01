@@ -4,7 +4,7 @@ var speed = SNAKE_SPEED;
 var update = function(speed, eatenFruitNum) {
 	
 	interval = window.setInterval(() => {
-			//console.log(speed + " " + snake.totalEatenFruit);
+			console.log(speed + " " + snake.totalEatenFruit);
 			ui.clearUi();
 			ui.sceneUi();
 			map.clearObject();
@@ -15,7 +15,10 @@ var update = function(speed, eatenFruitNum) {
 			map.draw();
 			//ui.inGameUi();
 			ui.uiTime();
-			if(snake.totalEatenFruit != eatenFruitNum && (snake.totalEatenFruit % 5) == 0) {
+			if(!gm.isHardModeOn &&  // 하드모드가 아닐경우를 앞에 배치해 뒤 상태는 시도도 안함
+						(snake.totalEatenFruit % 5) == 0 && // 5배수의 과일을 먹으면
+						snake.totalEatenFruit != eatenFruitNum) { // 이 구문이 빠지면 5개의 과일을 먹은 후 다음 과일을 먹기전까지 계속 빨라짐
+					
 				speed = Math.floor(speed * 0.95);
 				eatenFruitNum = snake.totalEatenFruit;
 				clearInterval(interval);

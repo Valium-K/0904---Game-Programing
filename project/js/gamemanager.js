@@ -122,9 +122,11 @@ function GameManager() {
 			}
 		}
 		
+		// 음식 시간이 다 되면
 		if(this.timeLeft <= 0) {
-			this.isGameOver = true;
 			this.timeLeft = 0;
+			this.isGameOver = true;
+			
 		}
 	}
 	
@@ -181,10 +183,10 @@ function GameManager() {
 			return;
 		}
 		
-		// 머리 위치와
+		// 머리 위치와 다르게
 		if(this.itemXPos == snake.getXPos() && this.itemYPos == snake.getYPos()) {
 			console.log("item: head same location");
-			this.pickLocation();
+			this.setRandomPos();
 			return;
 		}
 		
@@ -258,7 +260,7 @@ function GameManager() {
 			this.timeLeft = (now - this.nowTime);
 			this.timeLeft = SNAKE_HUNGER_TIME - this.timeLeft;
 			
-			
+			if(this.timeLeft <= 0) { this.timeLeft = 0; }
 		}, 100);
 	}
 	

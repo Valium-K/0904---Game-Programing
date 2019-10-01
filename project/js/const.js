@@ -12,7 +12,7 @@ const MAP_STROKE_COLOR = "#202830";
 const MAP_STROKE_COLOR_HARD = "#302020";
 
 // 지렁이 상수
-const SNAKE_SPEED = 250 * 0.5; // 지렁이 스피드
+const SNAKE_SPEED = 250 * 0.5; // 지렁이 스피드 - 한 프레임과 같음
 const SNAKE_HEAD_COLOR = "#00ff44"; // 지렁이 머리 색상
 const SNAKE_TAIL_COLOR = "#009919"; // 지렁이 꼬리 색상
 const SNAKE_HUNGER_TIME = SNAKE_SPEED * 2.7 * TILE_NUM;
