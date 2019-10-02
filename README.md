@@ -25,6 +25,7 @@
   * 추가: 키 입력 컨트롤러 버퍼추가
   * 개선: 기존 pickLocation 함수 개선 ( 스폰된 과일과 다른 오브젝트의 위치가 동일한 경우 )
   * 개선: Canvas 중앙배치
+  * 추가: 꼬리 드라데이션
   * 개선: Map 캔버스 디자인 개선
     * '디자인' 참고: https://www.youtube.com/watch?v=pxBW6FZglrI
   * 추가: 꼬리 줄이는 아이템 추가
