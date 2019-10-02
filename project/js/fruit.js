@@ -47,7 +47,7 @@ function Fruit() {
 					this.pickLocation();
 					return;
 				}
-		}
+			}
 		}
 		
 	}

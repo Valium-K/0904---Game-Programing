@@ -1,27 +1,28 @@
 * {
+	/* 정확한 위치계산을 위해 */
 	margin: 0px;
 	padding: 0px;
 }
 
 #body {
-	background: #202830;
+	/* 로딩시 화면 순간 흰색이 보기 싫어서 생 값 넣음 */
+	background: #303840;
 }
 
 #container {
-
 }
 
 #map {
+	/* 게임화면 스크롤 없애고 안 움직이게 하기위해 */
 	position: fixed;
 	z-index: 1;
-	
 }
 
 #game_canvas {
 	position: fixed;
 	z-index: 2;
-	
 }
+
 #ui {
 	position: fixed;
 	z-index: 3;

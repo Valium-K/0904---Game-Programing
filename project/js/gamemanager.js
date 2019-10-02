@@ -1,18 +1,18 @@
 function GameManager() {
-	this.itemSpawnNum = 0;
+	this.itemSpawnNum; // 아이템 스폰을 위한 타겟 넘버
+	this.itemCount; // 아이템을 먹은 수 - 실제 꼬리 길이를 구하기 위함
 	this.itemXPos;
 	this.itemYPos;
+	this.highScore;
+	
 	this.isItemOnTheMap;
 	this.isItNewScore;
 	this.isGameOver;
-	this.highScore;
-	this.itemCount; // 아이템을 먹은 수 - 실제 꼬리 길이를 구하기 위함
 	this.isHardModeOn = false;
 	
 	this.timeCounterAddress;
 	this.nowTime = 0;
 	this.timeLeft;
-	
 	
 	this.getItemXPos = function() { return this.itemXPos; }
 	this.getItemYPos = function() { return this.itemYPos; }
@@ -35,13 +35,17 @@ function GameManager() {
 			if(!audio.isDeadSFXPlayed) {
 				audio.bgm.pause();
 				audio.playSFX(DEAD);
+				
+				// dead 후 한번 dead sfx가 나오고 더는 안나와야함
 				audio.isDeadSFXPlayed = true;
 				
+				// 효과음 후 bgm 재생
 				window.setTimeout(() => {
 					audio.palyResultBgm();
 				}, 500);
 			}
 			
+			// 모드별 하이스코어 갱신
 			if(this.isHardModeOn) {
 				if(localStorage.getItem("highScore-hard") < snake.totalEatenFruit) {
 					this.isItNewScore = true;
@@ -54,16 +58,16 @@ function GameManager() {
 					localStorage.setItem("highScore", snake.totalEatenFruit);
 				}
 			}
-			ui.isItTitle = false;
-			ui.isItInGame = false;
-			ui.isItResult = true;
-		ui.resultMenu();
+			
+			// 게임상태 변경 후 결과창
+			ui.itIsResult();
+			ui.resultMenu();
 		}
 		
 		// 몸에 닿으면
 		for(let i = 0; i < (snake.getTail().length) - 1; i++) {
-			if(snake.getXPos() == snake.getTail()[i].x && snake.getYPos() == snake.getTail()[i].y) {
-				console.log("body hit");
+			if(snake.getXPos() == snake.getTail()[i].x && 
+			   snake.getYPos() == snake.getTail()[i].y) {
 				this.isGameOver = true;
 			}
 		}
@@ -72,10 +76,9 @@ function GameManager() {
 		if(snake.getXPos() < 0 || snake.getXPos() >= MAP_SIZE || 
 		   snake.getYPos() < 0 || snake.getYPos() >= MAP_SIZE) {
 			
-			console.log("wall hit");
-			
-			snake.setXPos(-1000);
-			snake.setYPos(-1000);
+			// null 을 넣으면 (0,0)으로 가버림
+			snake.setXPos(-200);
+			snake.setYPos(-200);
 			this.isGameOver = true;
 		}
 		
@@ -84,7 +87,9 @@ function GameManager() {
 				&& snake.getTail().length - (this.itemCount * ITEM_VALUE) >= LENGTH_FOR_ITEM_SPAWN // 실제 길이가 상수길이보다 크고
 				&& this.isItemOnTheMap == false) { // 맵에 아이템이 없으면
 			
+			// 게임오버 후 아이템 생성안되야함
 			if(gm.isGameOver) { return; }
+			
 			this.generateItem();
 			this.isItemOnTheMap = true;
 		}
@@ -93,30 +98,33 @@ function GameManager() {
 		if(snake.getXPos() == this.itemXPos && snake.getYPos() == this.itemYPos) {
 			this.isItemOnTheMap = false;
 			
+			// 현제 마지막 꼬리 + 줄일 꼬리수
 			var tailOffset = snake.getTailOffset() + ITEM_VALUE;
 			
-			for(var i = 0; i < tailOffset; i++) {
+			// 꼬리길이 감소
+			for(let i = snake.getTailOffset(); i < tailOffset; i++) {
 				snake.tail[i] = {
-					x: -500,
-					y: -500
+					x: -300,
+					y: -300
 				};
 			}	
 			
 			// 아이템 맵 밖으로 빼고
-			this.itemXPos = -700;
-			this.itemYPos = -700;
+			this.itemXPos = -400;
+			this.itemYPos = -400;
 			
 			// 아이템 기능 처리
-			snake.setTailOffset(snake.getTailOffset() + ITEM_VALUE);
+			snake.setTailOffset(tailOffset);
 			this.itemCount++;
 			audio.playSFX(ITEM_EAT);
 		}
 		
 		// 똥 밟으면
 		if(gm.isHardModeOn) {
-			for(let i = 0; i < snake.poopCount; i++) {
-				if(snake.getXPos() == snake.poop[i].x && snake.getYPos() == snake.poop[i].y) {
-					console.log("poop hit");
+			for(let i = 0; i < snake.getPoopCount(); i++) {
+				if(snake.getXPos() == snake.getPoop()[i].x && 
+				   snake.getYPos() == snake.getPoop()[i].y) {
+					   
 					this.isGameOver = true;
 				}
 			}
@@ -126,14 +134,12 @@ function GameManager() {
 		if(this.timeLeft <= 0) {
 			this.timeLeft = 0;
 			this.isGameOver = true;
-			
 		}
 	}
 	
+	// 게임 재시작 init
 	this.restartGame = function() {
-		ui.isItTitle = false;
-		ui.isItInGame = true;
-		ui.isItResult = false;
+		ui.itIsInGame();
 		
 		audio.bgm.pause();
 		snake.init();
@@ -154,6 +160,8 @@ function GameManager() {
 		
 		if(this.isHardModeOn) {
 			window.setTimeout(() => {
+				
+				//일정 시간 후에도 플레이어가 아이템을 먹지 않으면
 				if(this.isItemOnTheMap) {
 					this.itemXPos = null;
 					this.itemYPos = null;
@@ -163,15 +171,18 @@ function GameManager() {
 				}
 			}, ITEM_TIMEOUT);
 		}
+		
 		this.setItemSpawnNum();
 		this.setRandomPos();
 		audio.playSFX(ITEM_SPAWN);
 	}
 	
+	// 타겟넘버 생성
 	this.setItemSpawnNum = function() {
 		this.itemSpawnNum = Math.floor(Math.random() * ITEM_SPAWN_RANDOM_NUM) + 1;
 	}
 	
+	// 아이템 랜덤위치 생성
 	this.setRandomPos = function() {
 		this.itemXPos = (Math.floor(Math.random() * TILE_NUM - 1) + 1) * TILE_SIZE * 1;
 		this.itemYPos = (Math.floor(Math.random() * TILE_NUM - 1) + 1) * TILE_SIZE * 1;	
@@ -201,7 +212,7 @@ function GameManager() {
 		
 		// 똥 위치와 다르게
 		for(let i = 0; i < snake.poopCount; i++) {
-			if(this.itemXPos == snake.poop[i].x && this.itemYPos == snake.poop[i].y) {
+			if(this.itemXPos == snake.getPoop()[i].x && this.itemYPos == snake.getPoop()[i].y) {
 				console.log("item: poop same location");
 				this.setRandomPos();
 				return;
@@ -214,8 +225,8 @@ function GameManager() {
 			
 			// change to hard mode
 			document.getElementById("body").style.background = MAP_STROKE_COLOR_HARD;
-			map.mapColor = MAP_COLOR_HARD;
-			map.mapStrockColor = MAP_STROKE_COLOR_HARD;
+			map.setMapColor(MAP_COLOR_HARD);
+			map.setMapStrokeColor(MAP_STROKE_COLOR_HARD);
 			map.draw();
 			map.drawMap();
 			this.isHardModeOn = true;
@@ -223,25 +234,20 @@ function GameManager() {
 		else {
 			// change to normal mode
 			document.getElementById("body").style.background = MAP_STROKE_COLOR;
-			map.mapColor = MAP_COLOR;
-			map.mapStrockColor = MAP_STROKE_COLOR;
+			map.setMapColor(MAP_COLOR);
+			map.setMapStrokeColor(MAP_STROKE_COLOR);
 			map.draw();
 			map.drawMap();
 			this.isHardModeOn = false;
 		}
 	}
 	
-
-	
 	this.startGame = function() {
-		ui.isItTitle = false;
-		ui.isItInGame = true;
-		ui.isItResult = false;
+		ui.itIsInGame();
 		audio.playSFX(START);
 		
 		if(this.isHardModeOn) { 
 			audio.playIngameHardBgm();
-			
 		}
 		else {
 			audio.playInGameBgm();
@@ -249,21 +255,22 @@ function GameManager() {
 		}
 	}
 	
+	// 아이템 생존 카운터
 	this.timeCounter = function() {
-		// 일정시간 지나면 게임오버
+		// 하드모드면 넘어감
 		if(this.isHardModeOn) { return; }
 		
 		this.nowTime = new Date().getTime();
 		this.timeCounterAddress = setInterval(() => {
 			
 			var now = new Date().getTime();
-			this.timeLeft = (now - this.nowTime);
-			this.timeLeft = SNAKE_HUNGER_TIME - this.timeLeft;
+			this.timeLeft = SNAKE_HUNGER_TIME - (now - this.nowTime);
 			
 			if(this.timeLeft <= 0) { this.timeLeft = 0; }
 		}, 100);
 	}
 	
+	// 아이템 카운터 초기화
 	this.resetCounter = function() {
 		if(this.isHardModeOn) { return; }
 		

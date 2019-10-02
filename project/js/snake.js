@@ -25,6 +25,8 @@ function Snake() {
 	this.getTotalEatenFruit = function() { return this.totalEatenFruit; }
 	this.getTail = function() { return this.tail; }
 	this.getTailOffset = function() { return this.tailOffset; }
+	this.getPoopCount = function() {  return this.poopCount;  }
+	this.getPoop = function() { return this.poop; }
 	// setter
 	this.setXPos = function(x) {this.x = x;}
 	this.setYPos = function(y) {this.y = y;}
@@ -59,10 +61,13 @@ function Snake() {
 		}
 		
 		// 머리가 있던 자리에 가장 앞 꼬리 추가
-		this.tail[this.totalEatenFruit - 1] = {
-			x: this.x,
-			y: this.y
-		};
+		if(this.totalEatenFruit >= 0) {
+			this.tail[this.totalEatenFruit - 1] = {
+				x: this.x,
+				y: this.y
+			};
+		}
+		
 		
 		// 머리위치 갱신
 		this.x += this.xOffset;
@@ -113,6 +118,6 @@ function Snake() {
 			y: this.tail[this.tailOffset].y
 		}
 
-		this.poopCount += 1;
+		this.poopCount++;
 	}
 }

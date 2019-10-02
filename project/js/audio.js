@@ -4,12 +4,14 @@ function AudioManager() {
 	this.sfx;
 	this.isDeadSFXPlayed = false;
 	
+	
 	this.init = function() {
 		this.bgm = new Audio();
 		this.bgm.src = TITLE;
+		this.bgm.loop = true;
 		this.bgm.load();
-		this.sfx = new Array();
 		
+		this.sfx = new Array();
 		this.sfx[0] = new Audio(FRUIT_EAT);
 		this.sfx[1] = new Audio(ITEM_EAT);
 		this.sfx[2] = new Audio(ITEM_SPAWN);
@@ -20,6 +22,7 @@ function AudioManager() {
 		this.sfx[7] = new Audio(DIR_LEFT);
 		this.sfx[8] = new Audio(DIR_RIGHT);
 	}
+	
 	this.playTitleBgm = function() {
 		
 		// 구글 자동재생 정책으로 사용자가 인터렉션을 할 시간을 줌
@@ -35,10 +38,13 @@ function AudioManager() {
 			}
 		}, 500);
 	}
+	
+	
 	this.playInGameBgm = function() {
 		this.bgm.pause();
 		this.bgm.src = INGAME;
 		this.bgm.load();
+		
 		window.setTimeout(() => {
 			this.bgm.play();	
 		}, 650);
@@ -48,14 +54,17 @@ function AudioManager() {
 		this.bgm.pause();
 		this.bgm.src = INGAME_HARD;
 		this.bgm.load();
+		
 		window.setTimeout(() => {
 			this.bgm.play();	
-		}, 500);
+		}, 650);
 	}
+	
 	this.palyResultBgm = function() {
 		this.bgm.pause();
 		this.bgm.src = RESULT;
 		this.bgm.load();
+		
 		window.setTimeout(() => {
 			this.bgm.play();	
 		}, 500);

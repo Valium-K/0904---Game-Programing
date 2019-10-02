@@ -4,21 +4,22 @@
     <title>Snake Game Ver1.0</title>
 	<meta name = "description" content = "A Snake Game!!!">
     <meta name = "viewport" content = "width=device-width">
+	<script src="./js/const.js"></script>
 	<link rel="stylesheet" type="text/css" href="./css/snake.css"/>
   </head>
   <body id="body" onresize="reDraw()">
-
     <div id="container">
 		<canvas id="ui"></canvas>
 		<canvas id="map"></canvas>
 		<canvas id="game_canvas"></canvas>
 	</div>
-	<script src="./js/const.js"></script>
 	<script src="./js/audio.js"></script>
 	<script src="./js/map.js"></script>
 	<script>
+		// window 사이즈가 변결될 때마다 map을 새로그림 - 중앙배치를 위해
 		function reDraw() {
-			map.mapContxt.clearRect(0, 0, map.gameCanvas.width, map.gameCanvas.height);
+			map.mapContxt.clearRect(0, 0, map.gameCanvas.width,
+										  map.gameCanvas.height);
 			map.drawMap();
 		}
 	</script>
@@ -29,6 +30,5 @@
 	<script src="./js/ui.js"></script>
 	<script src="./js/inputmanager.js"></script>
 	<script src="./js/main.js"></script>
-	
   </body>
 </html>

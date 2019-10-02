@@ -3,10 +3,26 @@ function Ui() {
 	this.isItResult;
 	this.isItInGame;
 	
-	this.init = function() {
+	this.itIsTitle = function() {
 		this.isItTitle = true;
 		this.isItResult = false;
 		this.isItInGame = false;
+	}
+	
+	this.itIsResult = function() {
+		this.isItTitle = false;
+		this.isItResult = true;
+		this.isItInGame = false;
+	}
+	
+	this.itIsInGame = function() {
+		this.isItTitle = false;
+		this.isItResult = false;
+		this.isItInGame = true;
+	}
+	
+	this.init = function() {
+		this.itIsTitle();
 		
 		this.ui = document.getElementById("ui");
 		this.uiContext = this.ui.getContext("2d");
@@ -25,8 +41,6 @@ function Ui() {
 	this.inGameUi = function() {
 		this.uiContext.fillStyle = "#e0e0e0";
 		this.uiContext.font = '400% Arial';
-		
-		
 		
 		if(snake.totalEatenFruit < 10) { 
 			this.uiContext.fillText("S C O R E : 0" + snake.totalEatenFruit, 
