@@ -140,7 +140,7 @@ function GameManager() {
 	// 게임 재시작 init
 	this.restartGame = function() {
 		ui.itIsInGame();
-		
+		ui.setAlpha(0);
 		audio.bgm.pause();
 		snake.init();
 		fruit.pickLocation();

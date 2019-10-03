@@ -1,7 +1,10 @@
 function Ui() {
+	this.alpha = 0;
 	this.isItTitle;
 	this.isItResult;
 	this.isItInGame;
+	
+	this.setAlpha = function(a) { this.alpha = a; }
 	
 	this.itIsTitle = function() {
 		this.isItTitle = true;
@@ -95,6 +98,11 @@ function Ui() {
 	
 	this.resultMenu = function() {
 			this.clearUi();
+			
+			if(this.alpha <= 1) {
+				this.alpha += 0.15;
+				this.uiContext.globalAlpha = this.alpha;
+			}
 			
 			clearInterval(gm.timeCounterAddress);
 			this.uiContext.fillStyle = "#e0e0e0";
