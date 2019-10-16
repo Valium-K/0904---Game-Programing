@@ -104,14 +104,14 @@ function GameManager() {
 			// 꼬리길이 감소
 			for(let i = snake.getTailOffset(); i < tailOffset; i++) {
 				snake.tail[i] = {
-					x: -300,
-					y: -300
+					x: -2300,
+					y: -2300
 				};
 			}	
 			
 			// 아이템 맵 밖으로 빼고
-			this.itemXPos = -400;
-			this.itemYPos = -400;
+			this.itemXPos = -2400;
+			this.itemYPos = -2400;
 			
 			// 아이템 기능 처리
 			snake.setTailOffset(tailOffset);
