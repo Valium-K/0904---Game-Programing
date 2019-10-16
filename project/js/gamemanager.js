@@ -77,8 +77,8 @@ function GameManager() {
 		   snake.getYPos() < 0 || snake.getYPos() >= MAP_SIZE) {
 			
 			// null 을 넣으면 (0,0)으로 가버림
-			snake.setXPos(-200);
-			snake.setYPos(-200);
+			snake.setXPos(-2200);
+			snake.setYPos(-2200);
 			this.isGameOver = true;
 		}
 		
