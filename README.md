@@ -1,5 +1,6 @@
 # __게임 프로그래밍 기획서__
 
+### __최종 본__:  [S N A K E](https://valium-k.github.io/snake/)
 
 ### __타겟 게임__: SNAKE
 > 간단한 Snake 게임을 만들고 기능을 추가 할 예정.
